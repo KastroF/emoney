@@ -35,11 +35,7 @@ mongoose.connect("mongodb+srv://emoneysarl:2ItTxqHrRla49VUU@cluster0.pan21qj.mon
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-  app.use("/", (req, res) => {
-        
-    console.log("On y est bien")
-        res.status(201).json({status: 0, message: "Vous êtes à bon port"});
-  })
+
 
   const codeRouter = require("./routes/Code"); 
 
