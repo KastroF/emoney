@@ -41,5 +41,8 @@ mongoose.connect("mongodb+srv://emoneysarl:2ItTxqHrRla49VUU@cluster0.pan21qj.mon
         res.status(201).json({status: 0, message: "Vous êtes à bon port"});
   })
 
+  const codeRouter = require("./routes/Code"); 
+
+  app.use("/api/code", codeRouter); 
 
   module.exports = app;
