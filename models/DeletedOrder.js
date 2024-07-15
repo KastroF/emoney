@@ -10,7 +10,8 @@ const DeletedorderSchema = mongoose.Schema({
     date: {type: Date}, 
     phone: {type: String}, 
     deleter_id: {type: String}, 
-    deleted_date: {type: Date}
+    deleted_date: {type: Date},
+    use: {type: String}
 })
 
 module.exports = mongoose.model("Deletedorder", DeletedorderSchema);
