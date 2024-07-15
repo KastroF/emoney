@@ -1,0 +1,16 @@
+{
+  "name": "emoney2",
+  "version": "1.0.0",
+  "description": "l'appli nodejs de emoney, la plateforme des agrégateurs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fidele NDZIME",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1"
+  }
+}
