@@ -35,10 +35,10 @@ mongoose.connect("mongodb+srv://emoneysarl:2ItTxqHrRla49VUU@cluster0.pan21qj.mon
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-
-
   const codeRouter = require("./routes/Code"); 
+  const userRouter = require("./routes/User"); 
 
   app.use("/api/code", codeRouter); 
+  app.use("/api/user", userRouter);
 
   module.exports = app;
