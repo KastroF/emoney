@@ -234,15 +234,15 @@ exports.searchPartners = async (req, res) => {
     try {
     const { query } = req.body;
       
-      console.log(req.body);
+     // console.log(req.body);
 
       let body = {
         $or: [
           { name: { $regex: query, $options: 'i' } },
-          { expressPhone: { $regex: query, $options: 'i' } },
-          { amPhone: { $regex: query, $options: 'i' } },
-          { mmPhone: { $regex: query, $options: 'i' } },
-          { flashPhone: { $regex: query, $options: 'i' } }
+          { expressPhone: { $regex: query,  } },
+          { amPhone: { $regex: query, } },
+          { mmPhone: { $regex: query } },
+          { flashPhone: { $regex: query } }
         ]
       };
       //let body = {name: { $regex: query, $options: 'i' }}; 
@@ -256,6 +256,8 @@ exports.searchPartners = async (req, res) => {
         
            body = {...body, agg_id: req.auth.userId}
       }
+
+console.log(body);
       
     const users = await User.find(body).sort({date: -1}).limit(10); // Recherche insensible à la casse
       
