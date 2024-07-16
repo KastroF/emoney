@@ -236,32 +236,43 @@ exports.searchPartners = async (req, res) => {
       
      // console.log(req.body);
 
-      let body = {
-        $or: [
-          { name: { $regex: query, $options: 'i' } },
-          { expressPhone: { $regex: query,  } },
-          { amPhone: { $regex: query, } },
-          { mmPhone: { $regex: query } },
-          { flashPhone: { $regex: query } }
-        ]
-      };
-      //let body = {name: { $regex: query, $options: 'i' }}; 
-      
-      if(req.body.status == "rec"){
-        
-          body = {...body, rec_id: req.auth.userId}
-      }
-      
-      if(req.body.status == "agg"){
-        
-           body = {...body, agg_id: req.auth.userId}
-      }
+     if(query && query !== ""){
 
-console.log(body);
-      
-    const users = await User.find(body).sort({date: -1}).limit(10); // Recherche insensible à la casse
-      
-      res.status(200).json({status: 0, users});
+        let body = {
+            $or: [
+              { name: { $regex: query, $options: 'i' } },
+              { expressPhone: { $regex: query,  } },
+              { amPhone: { $regex: query, } },
+              { mmPhone: { $regex: query } },
+              { flashPhone: { $regex: query } }, 
+             
+            ]
+          };
+          //let body = {name: { $regex: query, $options: 'i' }}; 
+          
+          if(req.body.status == "rec"){
+            
+              body = {...body, rec_id: req.auth.userId}
+          }
+          
+          if(req.body.status == "agg"){
+            
+               body = {...body, agg_id: req.auth.userId}
+          }
+    
+    console.log(body);
+          
+        const users = await User.find(body).sort({date: -1}).limit(10); // Recherche insensible à la casse
+          
+          res.status(200).json({status: 0, users});
+
+     }else{
+
+        res.status(200).json({status: 1});
+
+     }
+
+
   
     } catch (error) {
       console.log(error)
