@@ -2,7 +2,10 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
 
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt"); 
+
+
+
 
 exports.addUser = (req, res) => {
   
