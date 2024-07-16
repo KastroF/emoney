@@ -260,7 +260,7 @@ exports.searchPartners = async (req, res) => {
                body = {...body, agg_id: req.auth.userId}
           }
     
-    console.log(body);
+   // console.log(body);
           
         const users = await User.find(body).sort({date: -1}).limit(10); // Recherche insensible à la casse
           
