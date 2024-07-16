@@ -235,17 +235,16 @@ exports.searchPartners = async (req, res) => {
     const { query } = req.body;
       
       console.log(req.body);
+
+      let body = {$or: [
+        {name: {$regex: query, $options: 'i' }}, 
+        {amPhone: {$regex: query, $options: 'i' }}, 
+        {mmPhone: {$regex: query, $options: 'i' }}, 
+        {flashPhone: {$regex: query, $options: 'i' }}, 
+        {expressPhone: {$regex: query, $options: 'i' }}
+      ]}
       
-     
-    let body = {
-        $or: [
-          { name: { $regex: query, $options: 'i' } },
-          { expressPhone: { $regex: query, $options: 'i' } },
-          { amPhone: { $regex: query, $options: 'i' } },
-          { mmPhone: { $regex: query, $options: 'i' } },
-          { flashPhone: { $regex: query, $options: 'i' } }
-        ]
-      };
+      //let body = {name: { $regex: query, $options: 'i' }}; 
       
       if(req.body.status == "rec"){
         
