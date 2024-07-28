@@ -1489,7 +1489,7 @@ exports.manageReturns = async (req, res, next) => {
       console.log("l'utilisateur", user);
       
     
-      if(user && user !== null && req.body.type == "am" || req.body.type == "mm"){
+      if(user && user !== null && req.body.balance && req.body.amount && req.body.amount !== req.body.balance){
         
           await User.updateOne({_id: user._id}, {$set: balance}); 
       
@@ -1582,7 +1582,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
                   
-                  next();
+                
                   
                   return
                     
@@ -1636,7 +1636,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
                   
-                  next();
+              
                   return
                     
                 }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) == parseInt(req.body.amount)).length > 0){
@@ -1679,7 +1679,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
                     
-                    next();
+                
                     return
                 
                 }else if(partials.length > 0 && testCombinaisons(partials, parseInt(req.body.amount) ) && testCombinaisons(partials, parseInt(req.body.amount) ).length > 0){
@@ -1738,7 +1738,7 @@ exports.manageReturns = async (req, res, next) => {
                                         res.status(201).json({status: 0});
       
                                         
-                                        next();
+                                   
                                         return
                     
                 
@@ -1791,7 +1791,7 @@ exports.manageReturns = async (req, res, next) => {
       
                                         res.status(201).json({status: 0});
       
-                                        next();
+                                      
                                         return
                   
                   
@@ -1847,7 +1847,7 @@ exports.manageReturns = async (req, res, next) => {
                           await newOrder.save();  
                           res.status(201).json({status: 0});
       
-                          next();
+                    
                           return
                   
                   
@@ -1901,7 +1901,7 @@ exports.manageReturns = async (req, res, next) => {
                           await newOrder.save();  
                           res.status(201).json({status: 0});
       
-                    next();
+           
                   return
                   
                   
@@ -1951,7 +1951,7 @@ exports.manageReturns = async (req, res, next) => {
                           await newOrder.save();  
                           res.status(201).json({status: 0});
       
-                    next();
+             
                   return
                   
                   
@@ -2004,7 +2004,7 @@ exports.manageReturns = async (req, res, next) => {
                           await newOrder.save();  
                           res.status(201).json({status: 0});
                   
-                        next();
+                
                         return
                   
                   
@@ -2047,7 +2047,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
                   
-                     next(); 
+                    
                   return
                   
                 
@@ -2092,7 +2092,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
                   
-                     next(); 
+                  
                   return
                     
                 
@@ -2117,7 +2117,7 @@ exports.manageReturns = async (req, res, next) => {
                   await newOrder.save(); 
                   
                   res.status(201).json({status: 0});
-                    next();
+              
                   return
                   
                   
@@ -2178,8 +2178,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
               
-              next();
-              
+         
               return
                 
             
@@ -2232,7 +2231,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
               
-              next();
+           
               return
                 
             }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) == parseInt(req.body.amount)).length > 0){
@@ -2275,7 +2274,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
                 
-                next();
+          
                 return
             
             }else if(partials.length > 0 && testCombinaisons(partials, parseInt(req.body.amount) ) && testCombinaisons(partials, parseInt(req.body.amount) ).length > 0){
@@ -2334,7 +2333,7 @@ exports.manageReturns = async (req, res, next) => {
                                     res.status(201).json({status: 0});
   
                                     
-                                    next();
+                           
                                     return
                 
             
@@ -2387,7 +2386,7 @@ exports.manageReturns = async (req, res, next) => {
   
                                     res.status(201).json({status: 0});
   
-                                    next();
+                        
                                     return
               
               
@@ -2443,7 +2442,7 @@ exports.manageReturns = async (req, res, next) => {
                       await newOrder.save();  
                       res.status(201).json({status: 0});
   
-                      next();
+               
                       return
               
               
@@ -2497,7 +2496,7 @@ exports.manageReturns = async (req, res, next) => {
                       await newOrder.save();  
                       res.status(201).json({status: 0});
   
-                next();
+          
               return
               
               
@@ -2547,7 +2546,7 @@ exports.manageReturns = async (req, res, next) => {
                       await newOrder.save();  
                       res.status(201).json({status: 0});
   
-                next();
+            
               return
               
               
@@ -2600,7 +2599,7 @@ exports.manageReturns = async (req, res, next) => {
                       await newOrder.save();  
                       res.status(201).json({status: 0});
               
-                    next();
+               
                     return
               
               
@@ -2643,7 +2642,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
               
-                 next(); 
+             
               return
               
             
@@ -2688,7 +2687,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
               
-                 next(); 
+         
               return
                 
             
@@ -2713,7 +2712,7 @@ exports.manageReturns = async (req, res, next) => {
               await newOrder.save(); 
               
               res.status(201).json({status: 0});
-                next();
+       
               return
               
               
@@ -2743,7 +2742,7 @@ exports.manageReturns = async (req, res, next) => {
             await newOrder.save(); 
         
           res.status(200).json({status: 5}); 
-          next();
+  
         return
       }
       
