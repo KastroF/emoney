@@ -1584,7 +1584,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                 
                   
-                  return
+                  next();
                     
                 
                 }else if(initials.length > 0 && testCombinaisons(initials, parseInt(req.body.amount) ) && testCombinaisons(initials, parseInt(req.body.amount) ).length > 0){
@@ -1637,7 +1637,7 @@ exports.manageReturns = async (req, res, next) => {
                   res.status(201).json({status: 0});
                   
               
-                  return
+                  next();
                     
                 }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) == parseInt(req.body.amount)).length > 0){
                   
@@ -1680,7 +1680,7 @@ exports.manageReturns = async (req, res, next) => {
                   res.status(201).json({status: 0});
                     
                 
-                    return
+                    next();
                 
                 }else if(partials.length > 0 && testCombinaisons(partials, parseInt(req.body.amount) ) && testCombinaisons(partials, parseInt(req.body.amount) ).length > 0){
                   
@@ -1739,7 +1739,7 @@ exports.manageReturns = async (req, res, next) => {
       
                                         
                                    
-                                        return
+                                        next();
                     
                 
                 }else if(orders.length > 0 && testCombinaisons2(orders, parseInt(req.body.amount)) && testCombinaisons2(orders, parseInt(req.body.amount)).length > 0){
@@ -1792,7 +1792,7 @@ exports.manageReturns = async (req, res, next) => {
                                         res.status(201).json({status: 0});
       
                                       
-                                        return
+                                        next();
                   
                   
       
@@ -1848,7 +1848,7 @@ exports.manageReturns = async (req, res, next) => {
                           res.status(201).json({status: 0});
       
                     
-                          return
+                          next();
                   
                   
                 }else if(partials.length > 0 && countAmountsToTarget2(partials, parseInt(req.body.amount)) && countAmountsToTarget2(partials, parseInt(req.body.amount)).length > 0){
@@ -1902,7 +1902,7 @@ exports.manageReturns = async (req, res, next) => {
                           res.status(201).json({status: 0});
       
            
-                  return
+                  next();
                   
                   
                 }else if(orders.length > 0 && countAmountsToTarget2(orders, parseInt(req.body.amount)) && countAmountsToTarget2(orders, parseInt(req.body.amount)).length > 0){
@@ -1952,7 +1952,7 @@ exports.manageReturns = async (req, res, next) => {
                           res.status(201).json({status: 0});
       
              
-                  return
+                  next();
                   
                   
                 }else if(orders.length > 0 && findClosestCombination(orders, parseInt(req.body.amount)).array.length > 0){
@@ -2005,7 +2005,7 @@ exports.manageReturns = async (req, res, next) => {
                           res.status(201).json({status: 0});
                   
                 
-                        return
+                        next();
                   
                   
                 }else if(initials.length > 0 && initials.filter(item => parseInt(item.amount) > parseInt(req.body.amount)).length > 0){
@@ -2048,7 +2048,7 @@ exports.manageReturns = async (req, res, next) => {
                   res.status(201).json({status: 0});
                   
                     
-                  return
+                  next();
                   
                 
                 }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) > parseInt(req.body.amount)).length > 0){
@@ -2093,7 +2093,7 @@ exports.manageReturns = async (req, res, next) => {
                   res.status(201).json({status: 0});
                   
                   
-                  return
+                  next();
                     
                 
                 }else{
@@ -2118,7 +2118,7 @@ exports.manageReturns = async (req, res, next) => {
                   
                   res.status(201).json({status: 0});
               
-                  return
+                  next()
                   
                   
                 }
@@ -2179,7 +2179,7 @@ exports.manageReturns = async (req, res, next) => {
               res.status(201).json({status: 0});
               
          
-              return
+              next();
                 
             
             }else if(initials.length > 0 && testCombinaisons(initials, parseInt(req.body.amount) ) && testCombinaisons(initials, parseInt(req.body.amount) ).length > 0){
@@ -2232,7 +2232,7 @@ exports.manageReturns = async (req, res, next) => {
               res.status(201).json({status: 0});
               
            
-              return
+              next();
                 
             }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) == parseInt(req.body.amount)).length > 0){
               
@@ -2275,7 +2275,7 @@ exports.manageReturns = async (req, res, next) => {
               res.status(201).json({status: 0});
                 
           
-                return
+              next();
             
             }else if(partials.length > 0 && testCombinaisons(partials, parseInt(req.body.amount) ) && testCombinaisons(partials, parseInt(req.body.amount) ).length > 0){
               
@@ -2334,7 +2334,7 @@ exports.manageReturns = async (req, res, next) => {
   
                                     
                            
-                                    return
+                                    next();
                 
             
             }else if(orders.length > 0 && testCombinaisons2(orders, parseInt(req.body.amount)) && testCombinaisons2(orders, parseInt(req.body.amount)).length > 0){
@@ -2387,7 +2387,7 @@ exports.manageReturns = async (req, res, next) => {
                                     res.status(201).json({status: 0});
   
                         
-                                    return
+                                    next();
               
               
   
@@ -2443,7 +2443,7 @@ exports.manageReturns = async (req, res, next) => {
                       res.status(201).json({status: 0});
   
                
-                      return
+                      next();
               
               
             }else if(partials.length > 0 && countAmountsToTarget2(partials, parseInt(req.body.amount)) && countAmountsToTarget2(partials, parseInt(req.body.amount)).length > 0){
@@ -2497,7 +2497,7 @@ exports.manageReturns = async (req, res, next) => {
                       res.status(201).json({status: 0});
   
           
-              return
+                      next();
               
               
             }else if(orders.length > 0 && countAmountsToTarget2(orders, parseInt(req.body.amount)) && countAmountsToTarget2(orders, parseInt(req.body.amount)).length > 0){
@@ -2547,7 +2547,7 @@ exports.manageReturns = async (req, res, next) => {
                       res.status(201).json({status: 0});
   
             
-              return
+                      next();
               
               
             }else if(orders.length > 0 && findClosestCombination(orders, parseInt(req.body.amount)).array.length > 0){
@@ -2600,7 +2600,7 @@ exports.manageReturns = async (req, res, next) => {
                       res.status(201).json({status: 0});
               
                
-                    return
+                      next();
               
               
             }else if(initials.length > 0 && initials.filter(item => parseInt(item.amount) > parseInt(req.body.amount)).length > 0){
@@ -2643,7 +2643,7 @@ exports.manageReturns = async (req, res, next) => {
               res.status(201).json({status: 0});
               
              
-              return
+              next();
               
             
             }else if(partials.length > 0 && partials.filter(item => parseInt(item.rest) > parseInt(req.body.amount)).length > 0){
@@ -2688,7 +2688,7 @@ exports.manageReturns = async (req, res, next) => {
               res.status(201).json({status: 0});
               
          
-              return
+              next();
                 
             
             }else{
@@ -2713,7 +2713,7 @@ exports.manageReturns = async (req, res, next) => {
               
               res.status(201).json({status: 0});
        
-              return
+              next();
               
               
             }
@@ -2743,7 +2743,7 @@ exports.manageReturns = async (req, res, next) => {
         
           res.status(200).json({status: 5}); 
   
-        return
+          next();
       }
       
       
