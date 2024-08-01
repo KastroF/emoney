@@ -1476,11 +1476,13 @@ exports.manageReturns = async (req, res, next) => {
        if(req.body.type == "flash"){
         
           short = {flashPhone: req.body.phone, agg_id: req.auth.userId}
+          balance = {flashBalance: req.body.balance}
       }
       
        if(req.body.type == "express"){
         
           short = {expressPhone: req.body.phone, agg_id: req.auth.userId}
+          balance = {expressBalance: req.body.balance}
       }
       
       
