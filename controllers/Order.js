@@ -3,6 +3,103 @@ const User = require("../models/User");
 const WebSocket = require('ws');
 const Deletedorder = require("../models/Deletedorderr");
 const Cash = require("../models/Cash")
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
+
+
+
+exports.getList = async (req, res) => {
+  
+
+  // Filtrer les utilisateurs en fonction du statut
+    console.log("en boss");
+    
+    try{
+  
+    const userFilter = {};
+    if (req.body.status === "rec") {
+      userFilter.rec_id = req.auth.userId;
+    } else if (req.body.status === "agg") {
+      userFilter.agg_id = req.auth.userId;
+    }
+  
+    const limit = 10;
+    let skip = req.body.skip || 0;
+    let usersWithOrders = [];
+    let hasMoreUsers = true;
+  
+    while (usersWithOrders.length < limit && hasMoreUsers) {
+      // Étape 1: Récupérer un lot d'utilisateurs avec pagination et tri
+      const users = await User.find(userFilter)
+        .sort({ date: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean();
+  
+      if (users.length === 0) {
+        hasMoreUsers = false;
+        break;
+      }
+  
+      // Obtenir les user_id
+      const userIds = users.map(user => user._id.toString());
+  
+      // Étape 2: Agréger les commandes pour ces utilisateurs
+      const orders = await Order.aggregate([
+        {
+          $match: {
+            agent_id: { $in: userIds },
+            status: { $in: ["partial", "initial"] }
+          }
+        },
+        {
+          $group: {
+            _id: "$agent_id", // Grouper par utilisateur
+            totalAmount: {
+              $sum: {
+                $cond: { if: { $eq: ["$status", "initial"] }, then: "$amount", else: 0 }
+              }
+            },
+            totalRest: {
+              $sum: {
+                $cond: { if: { $eq: ["$status", "partial"] }, then: "$rest", else: 0 }
+              }
+            }
+          }
+        }
+      ]);
+  
+      // Étape 3: Associer les résultats agrégés aux utilisateurs et filtrer ceux sans commandes
+      users.forEach(user => {
+        const order = orders.find(o => o._id.toString() === user._id.toString());
+        const totalSum = order ? order.totalAmount + order.totalRest : 0;
+        if (totalSum > 0) {
+          usersWithOrders.push({ name: user.name, id: user._id,  sum: totalSum });
+        }
+      });
+  
+      // Ajuster le skip pour le prochain lot
+      skip += limit;
+    }
+  
+    // Limiter les résultats au maximum de 10
+    usersWithOrders = usersWithOrders.slice(0, limit);
+  
+   // res.json(usersWithOrders);
+  
+    console.log(usersWithOrders);
+    
+    res.status(200).json({status: 0, list: usersWithOrders, skip: usersWithOrders.length === 10 ? parseInt(skip) + 10 : null})
+    
+  }catch(err){
+    
+      console.log(err); 
+      res.status(505).json({err})
+  }
+  
+    
+  }
 
 exports.addOrder = async (req, res) => {
   
@@ -460,7 +557,7 @@ exports.getOrders = async (req, res) => {
   
     if(req.body.readsOnly){
       
-            body = {...body, read: req.body.readsOnly}
+            body = {...body, read: !req.body.readsOnly}
   
     }
   
