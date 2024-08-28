@@ -586,21 +586,19 @@ exports.getOrders = async (req, res) => {
   
   try{
   
-  const resultat = await  Order.aggregate([
-    
+    const resultat = await Order.aggregate([
       {
         $match: {$and: [body, more]} 
-      }, 
+      },
       {
         $sort: {date: -1}
-      }, 
+      },
       {
         $skip: req.body.startAt
-      }, 
+      },
       {
         $limit: 10
-      }, 
-      
+      },
       {
         $addFields: {
           agentObjectId: {
@@ -619,18 +617,24 @@ exports.getOrders = async (req, res) => {
       {
         $unwind: {
           path: '$user_info',
-          preserveNullAndEmptyArrays: true // Si vous voulez inclure les commandes sans utilisateur associé
+          preserveNullAndEmptyArrays: true // Garde les commandes même sans user
+        }
+      },
+      {
+        // Utilisation de $ifNull pour garantir que 'user_info' est au moins un objet vide
+        $addFields: {
+          user_info: { $ifNull: ['$user_info', {}] }
         }
       },
       {
         $project: {
           _id: 1,
           agent_id: 1,
+          user_info: 1, // Inclut user_info (soit l'objet correspondant, soit {})
           order: "$$ROOT"
         }
       }
-      
-    ]); 
+    ]);
   
         const totals = await Order.aggregate([
       {
