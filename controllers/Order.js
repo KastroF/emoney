@@ -3537,7 +3537,7 @@ exports.manageReturns2 = async (req, res, next) => {
                     trans_id: req.body.trans_id,
                     agg_id: req.auth.userId,
                     status: "return", 
-                    read: true, 
+                    read: false, 
                     date: new Date(), 
                   //  message: `Utilisé en retour pour boucler avec ${orderr.rest} Fcfa la commande ${orderr.type} de ${orderr.amount} Fcfa du ${new Date(orderr.date).getDate()}/${new Date(orderr.date).getMonth() + 1}/${new Date(orderr.date).getFullYear()} à ${new Date(orderr.date).getHours()}h:${new Date(orderr.date).getHours()}mn`
 
