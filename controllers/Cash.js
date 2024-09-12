@@ -9,7 +9,7 @@ exports.addCash = (req, res) => {
       
       const newCash = new Cash({
         
-          amount: order.rest && order.rest > 0 ? order.rest : order.amount, 
+          amount: req.body.amount, 
           rec_id: order.rec_id, 
           agent_id: order.agent_id, 
           agg_id: order.agg_id, 
@@ -22,7 +22,7 @@ exports.addCash = (req, res) => {
       
         newCash.save().then(async () => {
           
-          await Order.updateOne({_id: req.body._id }, {$set: {rest: 0, read: true, message: order.message ? order.message+" et une remise d'argent en espèces de "+order.rest +" Fcfa ": "Remise en espèces de "+order.amount+" Fcfa"}}); 
+          await Order.updateOne({_id: req.body._id }, {$set: {rest: order.rest !== 0 ?  parseInt(order.rest) - parseInt(req.body.amount) : parseInt(order.amount) - parseInt(req.body.amount) , read: true, message: order.message ? order.message+" et une remise d'argent en espèces de "+ req.body.amount +" Fcfa ": "Remise en espèces de "+req.body.amount+" Fcfa"}}); 
           
           res.status(201).json({status: 0}); 
           
