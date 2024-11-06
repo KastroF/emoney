@@ -380,3 +380,23 @@ exports.addService = async (req, res) => {
 
 
 
+exports.getRecs = (req, res) => {
+  
+  User.find({agg_id: req.auth.userId, status: "rec"}).then((data) => {
+    
+      
+        res.status(200).json({status: 0, recs: data})
+    
+    
+    
+  }, (err) => {
+    
+    
+      console.log(err); 
+      res.status(505).json({err});
+  })
+}
+
+
+
+
