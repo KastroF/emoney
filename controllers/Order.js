@@ -7,7 +7,94 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 
-
+exports.getPendingReturns = async (req, res) => {
+  
+  let reqq = {}; 
+  
+  console.log(req.body)
+  
+  if(req.body.status == "agg"){
+      
+      reqq = `agg_id: ${req.auth.userId}`
+    
+  }else{
+    
+      reqq = `rec_id: ${req.auth.userId}`
+  }
+  
+  console.log(reqq);
+  
+  let orders;
+  
+  if(req.body.status === "rec"){
+    
+    orders = await Order.find({
+  status: "return",
+  $or: [
+    { $and: [{ read: true }, { rest: { $gt: 0 } }] },
+    { $or: [{ read: false }, { read: { $exists: false } }, { read: null }] },
+  ],
+  agent_id: {
+    $in: (
+      await User.find({ rec_id: req.auth.userId }).select("_id")
+    ).map((user) => user._id.toString()), // Conversion des ObjectId en chaînes
+  },
+});
+    
+  }else{
+  
+  if(req.body.web){
+    
+  orders = await  Order.find({
+  status: "return",
+  agg_id: req.auth.userId,
+  $or: [
+    {$and: [{read: true}, {rest: { $gt: 0 }}]}, 
+    {$or: [{ read: false }, { read: { $exists: false }}, { read: null } ]}
+  ]
+  
+  
+})
+    
+  }else{
+    
+    orders = await  Order.find({
+  status: "return",
+  agg_id: req.auth.userId,
+  $or: [
+    {$and: [{read: true}, {rest: { $gt: 0 }}]}, 
+    {$or: [{ read: false }, { read: { $exists: false }}, { read: null } ]}
+  ]
+  
+  
+})
+  }
+  
+}
+  
+   
+  
+  let sum = 0
+  
+  for(let order of orders){
+    
+    if(order.read == true){
+      
+        sum += order.rest
+    
+    }else{
+      
+      sum += order.amount
+    }
+      
+  }
+  
+  console.log(sum);
+  
+   res.status(200).json({ status: 0, sum });
+  
+  
+    }
 
 exports.getList = async (req, res) => {
  

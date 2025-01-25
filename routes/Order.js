@@ -18,6 +18,7 @@ router.post("/minutestest", auth, orderCtrl.minutesTest);
 router.post("/getreports", auth, orderCtrl.getReports);
 router.post("/deleteorder", auth, orderCtrl.deleteOrder);
 router.post("/managereturns", auth, orderCtrl.manageReturns2);
+router.post("/getpendingreturns", auth, orderCtrl.getPendingReturns);
 router.post("/getlist", auth, orderCtrl.getList);
 
 module.exports = router; 
