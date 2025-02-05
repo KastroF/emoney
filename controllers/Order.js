@@ -864,6 +864,85 @@ exports.getOrders = async (req, res) => {
     }
     
 
+    const recs = await User.find({status: "rec", agg_id: req.auth.userId});
+      
+      
+ 
+      
+    const start = new Date();
+    const end = new Date();
+
+    // Définir les heures pour début et fin de jour
+    start.setUTCHours(0, 0, 0, 0); // Minuit de date1
+    end.setUTCHours(23, 59, 59, 999); // Fin de date2
+
+  console.log(start); 
+  console.log(end);
+  
+  
+  let final = [];
+  
+  for(let rec of recs){
+    
+    
+const pipeline3 = [
+   {
+    $match: {
+      $and: [
+        {'date': { $gte: start, $lte: end }},
+        {author_id: rec._id.toString()}
+      ]
+         
+    }
+  }, 
+  {
+  $group: {
+      _id: null,
+      totalAmount: { $sum: '$amount' }, // Calcule la somme du champ amount
+    },
+ },
+]
+
+const pipeline4 = [
+{
+$match: {
+  $and: [
+    { date: { $gte: start, $lte: end } },
+    { "recoveries.author_id": { $eq: rec._id.toString() } },
+    { $or: [{ status: "partial" }, { status: "recovery" }] }
+  ]
+}
+},
+{
+$group: {
+  _id: null,
+  totalAmount: {
+    $sum: {
+      $cond: [
+        { $eq: ["$status", "partial"] }, // Condition pour "partial"
+        { $subtract: ["$amount", "$rest"] }, // Somme pour "partial"
+        "$amount" // Somme pour "recovery"
+      ]
+    }
+  }
+}
+}
+];
+
+const cashhh = await Cash.aggregate(pipeline3);
+const amount = await Order.aggregate(pipeline4)
+
+const cashhhh = cashhh.length > 0 ? cashhh[0].totalAmount : 0;
+const amountt = amount.length > 0 ? amount[0].totalAmount : 0;
+
+//console.log("on cache", cash);
+// console.log("On amount", amount);
+    
+final.push({name: rec.name, sum: amountt, retours: cashhhh})
+  
+  
+}
+
     
 
 
@@ -882,7 +961,7 @@ exports.getOrders = async (req, res) => {
 
 
     res.status(200).json({status: 0, orders: resultat, startAt: resultat.length === 10 ? parseInt(req.body.startAt) + 
-                             10 : null, amount: totalAmount + totalRest, amount2:  totalAmount2 + totalRest2, amount3: totalReturn1 +  totalReturn2}); 
+                             10 : null, amount: totalAmount + totalRest, amount2:  totalAmount2 + totalRest2, amount3: totalReturn1 +  totalReturn2, final}); 
     
     
 }catch(e){
