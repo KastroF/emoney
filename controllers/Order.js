@@ -946,7 +946,7 @@ exports.getOrders = async (req, res) => {
     },
         {
     $match: {
-      "recoveries.author_id": req.body._id,
+      "recoveries.author_id": { $eq: rec._id.toString() },
       "recoveries.date": { $gte: start, $lte: end},
     },
   },
