@@ -983,7 +983,7 @@ exports.getOrders = async (req, res) => {
     
     const cashhhh = cashhh.length > 0 ? cashhh[0].totalAmount : 0;
     const amountt = amount.length > 0 ? amount[0].totalAmount : 0;
-    const lastt = last.length > 0 ? last[0].sum : 0;
+    const lastt = last.length > 0 ? last[0].totalAmount : 0;
     //console.log("on cache", cash);
    // console.log("On amount", amount);
         
