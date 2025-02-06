@@ -883,65 +883,115 @@ exports.getOrders = async (req, res) => {
   let final = [];
   
   for(let rec of recs){
+        
+        
+    const pipeline3 = [
+       {
+        $match: {
+          $and: [
+            {'date': { $gte: start, $lte: end }},
+            {author_id: rec._id.toString()}
+          ]
+             
+        }
+      }, 
+      {
+      $group: {
+          _id: null,
+          totalAmount: { $sum: '$amount' }, // Calcule la somme du champ amount
+        },
+     },
+    ]
     
-    
-const pipeline3 = [
-   {
+    const pipeline4 = [
+  {
     $match: {
       $and: [
-        {'date': { $gte: start, $lte: end }},
-        {author_id: rec._id.toString()}
+        { date: { $gte: start, $lte: end } },
+        { "recoveries.author_id": { $eq: rec._id.toString() } },
+        { $or: [{ status: "partial" }, { status: "recovery" }] }
       ]
-         
     }
-  }, 
+  },
   {
-  $group: {
+    $group: {
       _id: null,
-      totalAmount: { $sum: '$amount' }, // Calcule la somme du champ amount
-    },
- },
-]
-
-const pipeline4 = [
-{
-$match: {
-  $and: [
-    { date: { $gte: start, $lte: end } },
-    { "recoveries.author_id": { $eq: rec._id.toString() } },
-    { $or: [{ status: "partial" }, { status: "recovery" }] }
-  ]
-}
-},
-{
-$group: {
-  _id: null,
-  totalAmount: {
-    $sum: {
-      $cond: [
-        { $eq: ["$status", "partial"] }, // Condition pour "partial"
-        { $subtract: ["$amount", "$rest"] }, // Somme pour "partial"
-        "$amount" // Somme pour "recovery"
-      ]
+      totalAmount: {
+        $sum: {
+          $cond: [
+            { $eq: ["$status", "partial"] }, // Condition pour "partial"
+            { $subtract: ["$amount", "$rest"] }, // Somme pour "partial"
+            "$amount" // Somme pour "recovery"
+          ]
+        }
+      }
     }
   }
-}
-}
 ];
+        
+      const  pipeline2 = [
+          {
+      $match: {
+        
+        $and: [
+          {'recoveries.date': { $gte: start, $lte: end }},
+          {status: {$in: ['partial', "recovery"]}},
+          {"recoveries.author_id": { $eq: rec._id.toString() }}, 
+        ],
+        
+      }
+    },
+    {
+      $unwind: '$recoveries', // Décompose le tableau recoveries
+    },
+        {
+    $match: {
+      "recoveries.author_id": req.body._id,
+      "recoveries.date": { $gte: start, $lte: end},
+    },
+  },
+  // Ajouter un champ converti pour `recoveries.amount` en tant que nombre
+  {
+    $addFields: {
+      "recoveries.amountNumber": {
+                $cond: {
+          if: { $isNumber: "$recoveries.amount" },
+          then: "$recoveries.amount",
+          else: {
+            $convert: {
+              input: "$recoveries.amount",
+              to: "double",
+              onError: 0,
+              onNull: 0
+            }
+          }
+        }// Conversion en nombre flottant (peut utiliser $toInt pour nombre entier)
+      }
+    }
+  },
+    {
+      $group: {
+          _id: null,
+          totalAmount: { $sum: '$recoveries.amountNumber' }, // Calcule la somme du champ amount
+        },
+    },
+    ]
 
-const cashhh = await Cash.aggregate(pipeline3);
-const amount = await Order.aggregate(pipeline4)
-
-const cashhhh = cashhh.length > 0 ? cashhh[0].totalAmount : 0;
-const amountt = amount.length > 0 ? amount[0].totalAmount : 0;
-
-//console.log("on cache", cash);
-// console.log("On amount", amount);
+    const cashhh = await Cash.aggregate(pipeline3);
+    const amount = await Order.aggregate(pipeline4)
+    const last = await Order.aggregate(pipeline2);
     
-final.push({name: rec.name, sum: amountt, retours: cashhhh})
-  
-  
-}
+    const cashhhh = cashhh.length > 0 ? cashhh[0].totalAmount : 0;
+    const amountt = amount.length > 0 ? amount[0].totalAmount : 0;
+    const lastt = last.length > 0 ? last[0].sum : 0;
+    //console.log("on cache", cash);
+   // console.log("On amount", amount);
+        
+    final.push({name: rec.name, sum: lastt, retours: cashhhh})
+      
+      
+  }
+
 
     
 
