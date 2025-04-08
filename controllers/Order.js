@@ -1028,6 +1028,10 @@ exports.recoveryAll = async (req, res) => {
   
   
   try{
+
+    const userrr = await User.findOne({_id: req.auth.userId})
+    
+    if(userrr.status === "agg" || userrr.status === "rec"){
     
     const orders = await Order.find({$and: [{$or: [{status: "initial"}, {status: "partial"}]}, {$or: [{type: "am"}, {type: "mm"}]}, 
                                            {agent_id: req.body._id}] }); 
@@ -1068,6 +1072,11 @@ exports.recoveryAll = async (req, res) => {
     
     res.status(201).json({status: 0});
     
+  }else{
+
+    res.status(201).json({status: 1});
+
+  }
     
   }catch(e){
     
