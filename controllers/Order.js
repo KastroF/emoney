@@ -1839,7 +1839,7 @@ exports.manageReturns = async (req, res, next) => {
       
       
       
-      if(user){
+      if(user && req.auth.userId !== "671a680fcac48fc7075f1ff2"){
         
        // console.log(user);
         
