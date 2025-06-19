@@ -4,6 +4,7 @@
   "description": "l'appli nodejs de emoney, la plateforme des agrégateurs",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fidele NDZIME",
